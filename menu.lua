@@ -21,18 +21,19 @@ local blackSqrs
 local background
 
 local function buttonEffect (obj)
+    
     local function loadDelay ()
       if levIdx == 1 then
           storyboard.gotoScene ( "topLevel", { effect = "crossFade" } )
       elseif levIdx == 2 then
-          storyboard.gotoScene ( "rightLevel", { effect = "crossFade" } )
+          storyboard.gotoScene (  obj.id, { effect = "crossFade" } )
       elseif levIdx == 3 then
           storyboard.gotoScene ( "botLevel", { effect = "crossFade" } )
       elseif levIdx  == 4 then
           storyboard.gotoScene ( "leftLevel", { effect = "crossFade" } )
       end
     end
-    
+
     if obj.name == "top" then
         xVal = 0
         yVal = -50
@@ -50,7 +51,7 @@ local function buttonEffect (obj)
         yVal = 0
         levIdx = 4
     end
-    
+   
     transition.to(
         obj,
         {
@@ -126,7 +127,7 @@ function scene:createScene( event )
             right.x = centerX + 30
             right.y = centerY - 10
             right.rotation = 45
-            right.name = "right"
+            right.id = "rightLevel"
             objects:insert(right)
             right:addEventListener("touch", loadLevel)
         else
