@@ -127,6 +127,7 @@ function scene:createScene( event )
             right.x = centerX + 30
             right.y = centerY - 10
             right.rotation = 45
+            right.name = "right"
             right.id = "rightLevel"
             objects:insert(right)
             right:addEventListener("touch", loadLevel)
