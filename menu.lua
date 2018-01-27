@@ -89,8 +89,8 @@ end
 function scene:create( event )
         local group = self.view
         
-        background = display.newGroup()
-        group:insert(background)
+        bgGroup = display.newGroup()
+        group:insert(bgGroup)
         
         blackSqrs = display.newGroup()
         group:insert(blackSqrs)
@@ -98,11 +98,11 @@ function scene:create( event )
         objects = display.newGroup()
         group:insert(objects)
         
-        bg = display.newRect( 0, 0, 320, 480)
+        bg = display.newRect(bgGroup, 0, 0, 320, 480)
         bg.x = centerX
         bg.y = centerY
-        bg:setFillColor(.5)
-        background:insert(bg)
+        bg:setFillColor(bgColor)
+     
         
         if topWin == false then
             top = display.newRect(0, 0, 40, 40)

@@ -180,7 +180,7 @@ function scene:create( event )
         bg = display.newRect(bgGroup, 0, 0, 320, 480)
         bg.x = centerX
         bg.y = centerY
-        bg:setFillColor(.5)
+        bg:setFillColor(bgColor)
         
         timer.performWithDelay(100, startLoop, 20)
   
