@@ -6,7 +6,7 @@
 
 -- Your code here
 
-local storyboard = require( "storyboard" )
+local composer = require("composer")
 
 display.setStatusBar(display.HiddenStatusBar)
 
@@ -23,7 +23,7 @@ leftWin = false
 
 
 
-storyboard.gotoScene ( "menu", { effect = "crossFade" } )
+composer.gotoScene ( "menu", { effect = "crossFade" } )
 
 
 
