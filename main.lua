@@ -34,8 +34,7 @@ local dbDeleted = false
 local function printDB ()
 	for row in db:nrows("SELECT * FROM GameData") do
 		print("row: ", row.UserID, "FirstName", row.FirstName, "Score", row.Score )
-		
-		dbLength[#dbLength+1] = 
+		--[[dbLength[#dbLength+1] = 
 		{
 			ID = row.UserID,
 			FirstName = row.FirstName,
@@ -43,13 +42,14 @@ local function printDB ()
 		}
 
 		table.insert(dbLength, #dbLength+1, row.FirstName )
-		--print(dbLength[1].ID)
+		--print(dbLength[1].ID)]]
+		
 	end
 	db:close()
 end
 
 local function submitTapped (name)
-	local userInput = name
+	local userInput = "name"
 	
 	if dbDeleted then
 		idx = 0
