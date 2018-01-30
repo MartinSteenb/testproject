@@ -1,6 +1,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+
 -- local forward references should go here --
 
 local whiteSqrs = {}
