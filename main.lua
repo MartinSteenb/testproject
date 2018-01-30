@@ -29,6 +29,7 @@ leftWin = false
 
 local idx = 0
 local dbLength = {}
+local dbDeleted = false
 
 local function printDB ()
 	for row in db:nrows("SELECT * FROM GameData") do
@@ -44,22 +45,31 @@ local function printDB ()
 		table.insert(dbLength, #dbLength+1, row.FirstName )
 		--print(dbLength[1].ID)
 	end
-	
+	db:close()
 end
 
 local function submitTapped (name)
 	local userInput = name
 	
-	local insert = [[INSERT INTO GameData VALUES (NULL,"]] .. userInput .. [[", "100");]]
+	if dbDeleted then
+		idx = 0
+		dbDeleted = false
+	else
+		idx = idx + 1
+	end
+	
+	local insert = [[INSERT INTO GameData VALUES (]] .. idx .. [[,"]] .. userInput .. [[", "100");]]
 	db:exec(insert)
 	printDB()
+	print(idx)
 end
 
 local function emptyTapped ()
+	dbDeleted = true
 	for row in db:nrows("SELECT * FROM GameData") do
-		local deleteQuery = [[DELETE FROM GameData WHERE UserID >=1;]]
-		row.UserID = 1
-		db:exec(deleteQuery)	
+		local deleteQuery = [[DELETE FROM GameData WHERE UserID >= 0;]]
+		db:exec(deleteQuery)
+		print("row: ", row.UserID, "FirstName", row.FirstName, "Score", row.Score )	
 	end
 end	
 
@@ -82,13 +92,14 @@ local function textListener(event)
 end
 
 
-local tableSetup = [[CREATE TABLE IF NOT EXISTS GameData (UserID INTEGER PRIMARY KEY, FirstName, Score);]]
+local tableSetup = [[CREATE TABLE IF NOT EXISTS GameData (UserID INTEGER PRIMARY KEY , FirstName, Score);]]
 db:exec(tableSetup)
 
 local userInput = native.newTextField(centerX, centerY-125, 200, 50)
 userInput:addEventListener("userInput", textListener)
 
 local submitButton = display.newText("SUBMIT USER", centerX, centerY-175, native.systemFont, 20) 
+submitButton:addEventListener("tap", submitTapped)
 
 local emptyButton = display.newText("EMPTY DB", centerX, centerY+100, native.systemFont, 30) 
 emptyButton:addEventListener("tap", emptyTapped)
