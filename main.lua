@@ -65,6 +65,7 @@ end
 
 local function textListener(event)
 	local phase = event.phase
+	local obj = event.target
 	local text = event.target.text
 	if ( event.phase == "began" ) then
         -- User begins editing "defaultField"
@@ -73,6 +74,8 @@ local function textListener(event)
         -- Output resulting text from "defaultField"
         --print( text )
  		submitTapped(text)
+ 		local text = display.newText(text, centerX, centerY+200, native.systemFont, 20) 
+ 		obj:removeSelf()
     elseif ( event.phase == "editing" ) then
 
     end
@@ -82,13 +85,12 @@ end
 local tableSetup = [[CREATE TABLE IF NOT EXISTS GameData (UserID INTEGER PRIMARY KEY, FirstName, Score);]]
 db:exec(tableSetup)
 
-local userInput = native.newTextField(centerX, centerY-175, 200, 50)
+local userInput = native.newTextField(centerX, centerY-125, 200, 50)
 userInput:addEventListener("userInput", textListener)
 
-local submitButton = display.newText("SUBMIT USER", centerX, centerY-125, native.systemFont, 20) 
-submitButton:addEventListener("tap", submitTapped)
+local submitButton = display.newText("SUBMIT USER", centerX, centerY-175, native.systemFont, 20) 
 
-local emptyButton = display.newText("EMPTY DB", centerX, centerY+100, native.systemFont, 20) 
+local emptyButton = display.newText("EMPTY DB", centerX, centerY+100, native.systemFont, 30) 
 emptyButton:addEventListener("tap", emptyTapped)
 
 
