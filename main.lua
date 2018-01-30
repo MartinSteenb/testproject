@@ -27,41 +27,20 @@ rightWin = false
 botWin = false
 leftWin = false
 
-local idx = 0
-local dbLength = {}
-local dbDeleted = false
 
 local function printDB ()
 	for row in db:nrows("SELECT * FROM GameData") do
 		print("row: ", row.UserID, "FirstName", row.FirstName, "Score", row.Score )
-		--[[dbLength[#dbLength+1] = 
-		{
-			ID = row.UserID,
-			FirstName = row.FirstName,
-			Score = row.Score
-		}
-
-		table.insert(dbLength, #dbLength+1, row.FirstName )
-		--print(dbLength[1].ID)]]
-		
 	end
-	db:close()
 end
 
-local function submitTapped (name)
+local function submitTapped (name, score)
 	local userInput = "name"
+	local score = 101
 	
-	if dbDeleted then
-		idx = 0
-		dbDeleted = false
-	else
-		idx = idx + 1
-	end
-	
-	local insert = [[INSERT INTO GameData VALUES (]] .. idx .. [[,"]] .. userInput .. [[", "100");]]
+	local insert = [[INSERT INTO GameData VALUES (NULL,"]] .. userInput .. [[", "]] .. score .. [[");]]
 	db:exec(insert)
 	printDB()
-	print(idx)
 end
 
 local function emptyTapped ()
@@ -91,6 +70,12 @@ local function textListener(event)
     end
 end
 
+local function closeDB ()
+	if db and db:isopen() then
+		db:close()
+	end
+end
+
 
 local tableSetup = [[CREATE TABLE IF NOT EXISTS GameData (UserID INTEGER PRIMARY KEY , FirstName, Score);]]
 db:exec(tableSetup)
@@ -103,11 +88,6 @@ submitButton:addEventListener("tap", submitTapped)
 
 local emptyButton = display.newText("EMPTY DB", centerX, centerY+100, native.systemFont, 30) 
 emptyButton:addEventListener("tap", emptyTapped)
-
-
-
-
-
 
 composer.gotoScene ( "menu", { effect = "crossFade" } )
 
