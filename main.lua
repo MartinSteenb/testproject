@@ -17,29 +17,6 @@ display.setStatusBar(display.HiddenStatusBar)
 
 math.randomseed( os.time() )
 
-local tableSetup = [[CREATE TABLE IF NOT EXISTS GameData (UserID INTEGER PRIMARY KEY autoincrement, FirstName, Score);]]
-db:exec(tableSetup)
-
-local dbButton = widget.new
-
-local insert = [[INSERT INTO GameData VALUES (NULL, "Martin", 100);]]
-db:exec(insert)
-
-
-if GameData == nil then
-	print("Empty db")
-else
-	print(GameData)
-end
-
-for row in db:nrows("SELECT * FROM GameData") do
-	print("row: ", row.UserID, "FirstName", row.FirstName, "Score", row.Score )
-
-end
-
-
-print(GameData)
-
 centerX = display.contentWidth * .5
 centerY = display.contentHeight * .5
 
@@ -49,6 +26,72 @@ topWin = false
 rightWin = false
 botWin = false
 leftWin = false
+
+local idx = 0
+local dbLength = {}
+
+local function printDB ()
+	for row in db:nrows("SELECT * FROM GameData") do
+		print("row: ", row.UserID, "FirstName", row.FirstName, "Score", row.Score )
+		
+		dbLength[#dbLength+1] = 
+		{
+			ID = row.UserID,
+			FirstName = row.FirstName,
+			Score = row.Score
+		}
+
+		table.insert(dbLength, #dbLength+1, row.FirstName )
+		--print(dbLength[1].ID)
+	end
+	
+end
+
+local function submitTapped (name)
+	local userInput = name
+	
+	local insert = [[INSERT INTO GameData VALUES (NULL,"]] .. userInput .. [[", "100");]]
+	db:exec(insert)
+	printDB()
+end
+
+local function emptyTapped ()
+	for row in db:nrows("SELECT * FROM GameData") do
+		local deleteQuery = [[DELETE FROM GameData WHERE UserID >=1;]]
+		row.UserID = 1
+		db:exec(deleteQuery)	
+	end
+end	
+
+local function textListener(event)
+	local phase = event.phase
+	local text = event.target.text
+	if ( event.phase == "began" ) then
+        -- User begins editing "defaultField"
+ 
+    elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+        -- Output resulting text from "defaultField"
+        --print( text )
+ 		submitTapped(text)
+    elseif ( event.phase == "editing" ) then
+
+    end
+end
+
+
+local tableSetup = [[CREATE TABLE IF NOT EXISTS GameData (UserID INTEGER PRIMARY KEY, FirstName, Score);]]
+db:exec(tableSetup)
+
+local userInput = native.newTextField(centerX, centerY-175, 200, 50)
+userInput:addEventListener("userInput", textListener)
+
+local submitButton = display.newText("SUBMIT USER", centerX, centerY-125, native.systemFont, 20) 
+submitButton:addEventListener("tap", submitTapped)
+
+local emptyButton = display.newText("EMPTY DB", centerX, centerY+100, native.systemFont, 20) 
+emptyButton:addEventListener("tap", emptyTapped)
+
+
 
 
 
