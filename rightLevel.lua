@@ -89,6 +89,7 @@ local function sqrTouched (event)
     time = 5
 end
 
+--Places all the squares on the screen
 local function startLoop() 
             if (x < 4) then
                 if (y < 5) then
