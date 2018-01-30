@@ -22,7 +22,12 @@ rightWin = false
 botWin = false
 leftWin = false
 
+lvlsCompleted = 0
 
+function completed (num)
+	lvlsCompleted = lvlsCompleted + num
+	print(lvlsCompleted)
+end
 
 
 composer.gotoScene ( "menu", { effect = "crossFade" } )

@@ -34,6 +34,7 @@ local uiGroup
 
 local function goalReached ()
     botWin = true
+    completed(1)
     local function loadDelay ()
         composer.gotoScene ( "menu", { effect = "crossFade" } )
     end

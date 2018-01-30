@@ -31,6 +31,7 @@ local uiGroup
 
 local function goalReached () 
     rightWin = true
+    completed(1)
     local function loadDelay ()
         composer.gotoScene ( "menu", { effect = "crossFade" } )
     end

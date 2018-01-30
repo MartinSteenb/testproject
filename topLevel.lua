@@ -34,6 +34,7 @@ local uiGroup
 
 local function goalReached ()
     topWin = true
+    completed(1)
     local function loadDelay ()
         composer.gotoScene ( "menu", { effect = "crossFade" } )
     end
@@ -216,7 +217,7 @@ function scene:hide( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
-
+        
 	end
 end
 

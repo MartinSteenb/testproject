@@ -11,6 +11,19 @@ local right
 local bot
 local left
 
+local topTop
+local topRight
+local rightTop
+local rightRight
+local rightBot
+local botRight
+local botBot
+local botLeft
+local leftBot
+local leftLeft
+local leftTop
+local topLeft
+
 local delayTimer
 local xVal
 local yVal
@@ -19,6 +32,8 @@ local levIdx
 local objects
 local blackSqrs
 local background
+
+local completed = false
 
 local function buttonEffect (obj)
     
@@ -103,81 +118,90 @@ function scene:create( event )
         bg.y = centerY
         bg:setFillColor(bgColor)
      
-        
-        if topWin == false then
-            top = display.newRect(0, 0, 40, 40)
-            top.x = centerX 
-            top.y = centerY - 40
-            top.rotation = 45
-            top.name = "top"
-            objects:insert(top)
-            top:addEventListener("touch", loadLevel)
-        else
-            top = display.newRect(0, 0, 40, 40)
-            top.x = centerX 
-            top.y = centerY - 40
-            top.rotation = 45
-            objects:insert(top)
-            top:setFillColor(black)
-            top.alpha = .2
-        end
-        
-        if rightWin == false then
-            print("false");
-            right = display.newRect(0, 0, 40, 40)
-            right.x = centerX + 30
-            right.y = centerY - 10
-            right.rotation = 45
-            right.name = "right"
-            right.id = "rightLevel"
-            objects:insert(right)
-            right:addEventListener("touch", loadLevel)
-        else
-            right = display.newRect(0, 0, 40, 40)
-            right.x = centerX + 30
-            right.y = centerY - 10
-            right.rotation = 45
-            objects:insert(right)
-            right:setFillColor(black)
-            right.alpha = .2
-            print("true");
-        end
-        
-        if botWin == false then
-            bot = display.newRect(0, 0, 40, 40)
-            bot.x = centerX 
-            bot.y = centerY + 20
-            bot.rotation = 45
-            bot.name = "bot"
-            objects:insert(bot)
-            bot:addEventListener("touch", loadLevel)
-        else
-            bot = display.newRect(0, 0, 40, 40)
-            bot.x = centerX 
-            bot.y = centerY + 20
-            bot.rotation = 45
-            objects:insert(bot)
-            bot:setFillColor(black)
-            bot.alpha = .2
-        end
-        
-        if leftWin == false then
-            left = display.newRect( 0, 0, 40, 40)
-            left.x = centerX - 30 
-            left.y = centerY - 10
-            left.rotation = 45
-            left.name = "left"
-            objects:insert(left)
-            left:addEventListener("touch", loadLevel)
-        else
-            left = display.newRect( 0, 0, 40, 40)
-            left.x = centerX - 30 
-            left.y = centerY - 10
-            left.rotation = 45
-            objects:insert(left)
-            left:setFillColor(black)
-            left.alpha = .2
-        end
+        if lvlsCompleted <= 3 then
+            if topWin == false then
+                top = display.newRect(0, 0, 40, 40)
+                top.x = centerX 
+                top.y = centerY - 40
+                top.rotation = 45
+                top.name = "top"
+                objects:insert(top)
+                top:addEventListener("touch", loadLevel)
+            else
+                top = display.newRect(0, 0, 40, 40)
+                top.x = centerX 
+                top.y = centerY - 40
+                top.rotation = 45
+                objects:insert(top)
+                top:setFillColor(black)
+                top.alpha = .2
+            end
+            
+            if rightWin == false then
+                right = display.newRect(0, 0, 40, 40)
+                right.x = centerX + 30
+                right.y = centerY - 10
+                right.rotation = 45
+                right.name = "right"
+                right.id = "rightLevel"
+                objects:insert(right)
+                right:addEventListener("touch", loadLevel)
+            else
+                right = display.newRect(0, 0, 40, 40)
+                right.x = centerX + 30
+                right.y = centerY - 10
+                right.rotation = 45
+                objects:insert(right)
+                right:setFillColor(black)
+                right.alpha = .2
+            end
+            
+            if botWin == false then
+                bot = display.newRect(0, 0, 40, 40)
+                bot.x = centerX 
+                bot.y = centerY + 20
+                bot.rotation = 45
+                bot.name = "bot"
+                objects:insert(bot)
+                bot:addEventListener("touch", loadLevel)
+            else
+                bot = display.newRect(0, 0, 40, 40)
+                bot.x = centerX 
+                bot.y = centerY + 20
+                bot.rotation = 45
+                objects:insert(bot)
+                bot:setFillColor(black)
+                bot.alpha = .2
+            end
+            
+            if leftWin == false then
+                left = display.newRect( 0, 0, 40, 40)
+                left.x = centerX - 30 
+                left.y = centerY - 10
+                left.rotation = 45
+                left.name = "left"
+                objects:insert(left)
+                left:addEventListener("touch", loadLevel)
+            else
+                left = display.newRect( 0, 0, 40, 40)
+                left.x = centerX - 30 
+                left.y = centerY - 10
+                left.rotation = 45
+                objects:insert(left)
+                left:setFillColor(black)
+                left.alpha = .2
+            end
+        elseif lvlsCompleted >= 4 then
+                topTop = display.newRect( 0, 0, 40, 40)
+                topTop.x = centerX - 30 
+                topTop.y = centerY - 10
+                topTop.rotation = 45
+                topTop.name = "left"
+                objects:insert(topTop)
+                --topTop:addEventListener("touch", loadLevel)
+            else  
+
+        end    
 end
 
 
