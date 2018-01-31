@@ -10,7 +10,7 @@ local composer = require("composer")
 local sqlite3 = require("sqlite3")
 local widget = require("widget")
 
-local path = system.pathForFile("highscores.db", system.DocumentsDirectory)
+local path = system.pathForFile("test.db", system.DocumentsDirectory)
 local db = sqlite3.open(path)
 
 display.setStatusBar(display.HiddenStatusBar)
@@ -28,14 +28,83 @@ botWin = false
 leftWin = false
 
 
-local function printDB ()
-	for row in db:nrows("SELECT * FROM GameData") do
-		print("row: ", row.UserID, "FirstName", row.FirstName, "Score", row.Score )
-	end
+
+local function onRowRender (event)
+    local row = event.row
+
+    local font = native.systemFont
+    local fontSize = 24
+    local rowHeight = row.height / 2
+
+    local options_id = {
+        parent = row,
+        text = row.params.ID,
+        x = 50,
+        y = rowHeight,
+        font = font,
+        fontSize = fontSize,
+    }
+
+    row.id = display.newText(options_id)
+    row.id.anchorX = 0
+    row.id:setFillColor(black)
+
+    local options_name = {
+        parent = row,
+        text = row.params.FirstName,
+        x = 50,
+        y = rowHeight,
+        font = font,
+        fontSize = fontSize,
+    }
+
+    row.params.FirstName = display.newText(options_name)
+    row.params.FirstName:setFillColor(black)
+    row.params.FirstName.x = row.id.anchorX+150
+
+    local options_score = {
+        parent = row,
+        text = row.params.Score,
+        x = 50,
+        y = rowHeight,
+        font = font,
+        fontSize = fontSize,
+    }
+
+    row.params.Score = display.newText(options_score)
+    row.params.Score:setFillColor(black)
+    row.params.Score.x = row.params.FirstName.x+100
+
 end
 
-local function submitTapped (name, score)
-	local userInput = "name"
+local function printDB ()
+    local table_options = {
+        top = 75,
+        hideBackground = true,
+        onRowRender = onRowRender,
+    }   
+    local tableView = widget.newTableView(table_options)
+    --uiGroup:insert(tableView)
+
+    for row in db:nrows("SELECT * FROM GameData WHERE UserID <= 7") do
+        print("row: ", row.UserID, "FirstName", row.FirstName, "Score", row.Score )
+        
+        local rowParams = {
+            ID = row.UserID,
+            FirstName = row.FirstName,
+            Score = row.Score,
+        }
+
+        tableView:insertRow(
+            {   
+                rowHeight = 50,
+                params = rowParams,
+            }
+        )
+    end
+end
+
+local function submitTapped (userInput, score)
 	local score = 101
 	
 	local insert = [[INSERT INTO GameData VALUES (NULL,"]] .. userInput .. [[", "]] .. score .. [[");]]
@@ -48,7 +117,6 @@ local function emptyTapped ()
 	for row in db:nrows("SELECT * FROM GameData") do
 		local deleteQuery = [[DELETE FROM GameData WHERE UserID >= 0;]]
 		db:exec(deleteQuery)
-		print("row: ", row.UserID, "FirstName", row.FirstName, "Score", row.Score )	
 	end
 end	
 
@@ -84,7 +152,6 @@ local userInput = native.newTextField(centerX, centerY-125, 200, 50)
 userInput:addEventListener("userInput", textListener)
 
 local submitButton = display.newText("SUBMIT USER", centerX, centerY-175, native.systemFont, 20) 
-submitButton:addEventListener("tap", submitTapped)
 
 local emptyButton = display.newText("EMPTY DB", centerX, centerY+100, native.systemFont, 30) 
 emptyButton:addEventListener("tap", emptyTapped)
